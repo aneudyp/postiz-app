@@ -11,6 +11,7 @@ import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.v
 import { XDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/x.dto';
 import { Input } from '@gitroom/react/form/input';
 import { Checkbox } from '@gitroom/react/form/checkbox';
+import { XPreview } from '@gitroom/frontend/components/new-launch/providers/x/x.preview';
 
 const whoCanReply = [
   {
@@ -86,7 +87,7 @@ export default withProvider({
   postComment: PostComment.POST,
   minimumCharacters: [],
   SettingsComponent: SettingsComponent,
-  CustomPreviewComponent: undefined,
+  CustomPreviewComponent: XPreview,
   dto: XDto,
   maximumCharacters: (settings) => {
     if (settings?.[0]?.value) {
