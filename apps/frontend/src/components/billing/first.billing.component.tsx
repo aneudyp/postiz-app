@@ -156,7 +156,7 @@ export const FirstBillingComponent = () => {
               <div>
                 {t(
                   'billing_pay_nothing_7_days',
-                  'Pay NOTHING for the first 7-days'
+                  'Pay NOTHING for the first 14-days'
                 )}
               </div>
             </div>

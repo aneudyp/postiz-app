@@ -458,7 +458,7 @@ export class StripeService {
         `/launches?onboarding=true&check=${uniqueId}${isUtm}`,
       mode: 'subscription',
       subscription_data: {
-        ...(allowTrial ? { trial_period_days: 7 } : {}),
+        ...(allowTrial ? { trial_period_days: 14 } : {}),
         metadata: {
           service: 'gitroom',
           ...body,
@@ -519,7 +519,7 @@ export class StripeService {
         `/launches?onboarding=true&check=${uniqueId}${isUtm}`,
       mode: 'subscription',
       subscription_data: {
-        ...(allowTrial ? { trial_period_days: 7 } : {}),
+        ...(allowTrial ? { trial_period_days: 14 } : {}),
         metadata: {
           service: 'gitroom',
           ...body,
