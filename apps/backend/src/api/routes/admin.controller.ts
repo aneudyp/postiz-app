@@ -9,6 +9,7 @@ import { User } from '@prisma/client';
 import { ApiTags } from '@nestjs/swagger';
 import { ErrorsService } from '@gitroom/nestjs-libraries/database/prisma/errors/errors.service';
 import { AdminStatsService } from '@gitroom/nestjs-libraries/database/prisma/admin-stats/admin-stats.service';
+import { AdminManagementRepository } from '@gitroom/nestjs-libraries/database/prisma/admin-stats/admin-management.repository';
 import dayjs from 'dayjs';
 
 @ApiTags('Admin')
@@ -16,7 +17,8 @@ import dayjs from 'dayjs';
 export class AdminController {
   constructor(
     private _errorsService: ErrorsService,
-    private _adminStatsService: AdminStatsService
+    private _adminStatsService: AdminStatsService,
+    private _adminManagement: AdminManagementRepository
   ) {}
 
   private assertSuperAdmin(user: User) {
@@ -67,5 +69,62 @@ export class AdminController {
       to: toDate.endOf('day').toDate(),
       unknownOnly: unknownOnly === 'true' || unknownOnly === '1',
     });
+  }
+
+  // ─── Users Management ────────────────────────────────────────────────────
+
+  @Get('/users')
+  async listUsers(
+    @GetUserFromRequest() user: User,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+    @Query('search') search?: string,
+    @Query('plan') plan?: string
+  ) {
+    this.assertSuperAdmin(user);
+    return this._adminManagement.listUsers({
+      page: page ? parseInt(page, 10) : 0,
+      limit: limit ? parseInt(limit, 10) : 20,
+      search: search || undefined,
+      plan: plan || undefined,
+    });
+  }
+
+  @Get('/users/:id')
+  async getUserDetail(
+    @GetUserFromRequest() user: User,
+    @Query('id') id?: string
+  ) {
+    this.assertSuperAdmin(user);
+    return this._adminManagement.getUserDetail(id || '');
+  }
+
+  // ─── Billing Overview ────────────────────────────────────────────────────
+
+  @Get('/billing')
+  async getBilling(@GetUserFromRequest() user: User) {
+    this.assertSuperAdmin(user);
+    return this._adminManagement.getBillingOverview();
+  }
+
+  // ─── Traffic / Signups ───────────────────────────────────────────────────
+
+  @Get('/traffic')
+  async getTraffic(
+    @GetUserFromRequest() user: User,
+    @Query('days') days?: string
+  ) {
+    this.assertSuperAdmin(user);
+    return this._adminManagement.getTrafficStats(
+      days ? parseInt(days, 10) : 30
+    );
+  }
+
+  // ─── ENV Status ──────────────────────────────────────────────────────────
+
+  @Get('/env')
+  async getEnv(@GetUserFromRequest() user: User) {
+    this.assertSuperAdmin(user);
+    return this._adminManagement.getEnvStatus();
   }
 }

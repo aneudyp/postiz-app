@@ -1,4 +1,5 @@
 import { Global, Module } from '@nestjs/common';
+import { AdminManagementRepository } from '@gitroom/nestjs-libraries/database/prisma/admin-stats/admin-management.repository';
 import { PrismaRepository, PrismaService, PrismaTransaction } from './prisma.service';
 import { OrganizationRepository } from '@gitroom/nestjs-libraries/database/prisma/organizations/organization.repository';
 import { OrganizationService } from '@gitroom/nestjs-libraries/database/prisma/organizations/organization.service';
@@ -97,6 +98,7 @@ import { AdminStatsService } from '@gitroom/nestjs-libraries/database/prisma/adm
     ErrorsService,
     AdminStatsRepository,
     AdminStatsService,
+    AdminManagementRepository,
   ],
   get exports() {
     return this.providers;
